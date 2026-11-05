@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco-Defender: Misión Planeta Clean</title>
+    <title>Alcano Challenge: Química en Acción</title>
     <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #050b14;
+            --bg-dark: #070b14;
+            --panel-bg: rgba(13, 25, 48, 0.85);
             --primary: #00ffcc;
             --primary-glow: rgba(0, 255, 204, 0.4);
             --secondary: #ff0055;
-            --secondary-glow: rgba(255, 0, 85, 0.4);
             --accent: #ffe600;
             --accent-glow: rgba(255, 230, 0, 0.4);
-            --panel-bg: rgba(10, 25, 47, 0.75);
-            --panel-border: rgba(0, 255, 204, 0.3);
-            --text-color: #e6f1ff;
-            --font-heading: 'Orbitron', sans-serif;
+            --info: #00bfff;
+            --text: #e6f1ff;
+            --font-head: 'Orbitron', sans-serif;
             --font-body: 'Rajdhani', sans-serif;
         }
 
@@ -35,12 +34,12 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: var(--bg-color);
+            background-color: var(--bg-dark);
             font-family: var(--font-body);
-            color: var(--text-color);
+            color: var(--text);
         }
 
-        #game-container {
+        #app-container {
             position: relative;
             width: 100vw;
             height: 100vh;
@@ -58,62 +57,57 @@
             z-index: 1;
         }
 
-        /* --- UI OVERLAY LAYER --- */
-        .ui-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        /* GLASS PANEL STYLES */
+        .glass-card {
+            background: var(--panel-bg);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 16px;
+            padding: 25px 35px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
             z-index: 10;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
+            width: 90%;
+            max-width: 750px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
         }
 
-        .interactive {
-            pointer-events: auto;
-        }
-
-        /* Custom Buttons */
+        /* BUTTONS */
         .btn {
             background: linear-gradient(135deg, rgba(0,255,204,0.1), rgba(0,255,204,0.3));
-            border: 1px solid var(--primary);
+            border: 1.5px solid var(--primary);
             color: var(--primary);
-            padding: 12px 28px;
-            font-family: var(--font-heading);
+            padding: 12px 24px;
+            font-family: var(--font-head);
             font-size: 1rem;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-radius: 6px;
+            letter-spacing: 1.5px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.25s ease;
-            box-shadow: 0 0 15px rgba(0,255,204,0.2);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            box-shadow: 0 0 12px rgba(0,255,204,0.2);
         }
 
         .btn:hover {
             background: var(--primary);
-            color: #000;
+            color: #050b14;
             box-shadow: 0 0 25px var(--primary);
             transform: translateY(-2px);
         }
 
-        .btn:active {
-            transform: translateY(1px);
-        }
+        .btn:active { transform: translateY(1px); }
 
         .btn-secondary {
             border-color: var(--secondary);
             color: var(--secondary);
             background: linear-gradient(135deg, rgba(255,0,85,0.1), rgba(255,0,85,0.3));
-            box-shadow: 0 0 15px rgba(255,0,85,0.2);
+            box-shadow: 0 0 12px rgba(255,0,85,0.2);
         }
 
         .btn-secondary:hover {
@@ -126,410 +120,433 @@
             border-color: var(--accent);
             color: var(--accent);
             background: linear-gradient(135deg, rgba(255,230,0,0.1), rgba(255,230,0,0.3));
-            box-shadow: 0 0 15px rgba(255,230,0,0.2);
+            box-shadow: 0 0 12px rgba(255,230,0,0.2);
         }
 
         .btn-accent:hover {
             background: var(--accent);
-            color: #000;
+            color: #050b14;
             box-shadow: 0 0 25px var(--accent);
         }
 
-        .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            box-shadow: none !important;
-            transform: none !important;
-            border-color: #555 !important;
-            color: #888 !important;
-            background: rgba(255,255,255,0.05) !important;
-        }
-
-        /* Glassmorphic Panel */
-        .glass-panel {
-            background: var(--panel-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--panel-border);
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7);
-        }
-
-        /* HUD STYLES */
-        #hud {
-            display: none;
-            width: 100%;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .hud-card {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .bar-container {
-            width: 220px;
-            height: 16px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.2);
-            position: relative;
-        }
-
-        .bar-fill {
-            height: 100%;
-            width: 100%;
-            transition: width 0.2s ease-out;
-        }
-
-        #hp-fill { background: linear-gradient(90deg, #ff0055, #ff5500); }
-        #shield-fill { background: linear-gradient(90deg, #0088ff, #00ffcc); }
-
-        .score-display {
-            font-family: var(--font-heading);
-            font-size: 1.8rem;
-            color: #fff;
-            text-shadow: 0 0 10px var(--primary-glow);
-        }
-
-        .combo-badge {
-            font-family: var(--font-heading);
-            font-size: 1.2rem;
-            color: var(--accent);
-            opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
-            transform: scale(0.8);
-        }
-
-        .combo-badge.active {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-
-        /* MENUS & MODALS */
-        .modal-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 20;
-            background: rgba(5, 11, 20, 0.85);
-            backdrop-filter: blur(8px);
-            transition: opacity 0.3s ease;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .menu-box {
-            width: 90%;
-            max-width: 650px;
-            max-height: 90vh;
-            overflow-y: auto;
+        /* TITLES */
+        .title-main {
+            font-family: var(--font-head);
+            font-size: 2.5rem;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .menu-title {
-            font-family: var(--font-heading);
-            font-size: 2.8rem;
-            background: linear-gradient(90deg, var(--primary), #ffffff, var(--primary));
+            background: linear-gradient(90deg, var(--primary), #ffffff, var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 20px var(--primary-glow);
-            letter-spacing: 3px;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
         }
 
-        .menu-subtitle {
+        .subtitle {
+            text-align: center;
             color: #88a0c0;
             font-size: 1.1rem;
-            margin-top: -10px;
+            margin-bottom: 25px;
         }
 
-        /* SHOP & ACHIEVEMENTS TABS */
-        .tab-nav {
+        /* HUD & HEADER */
+        .hud-header {
             display: flex;
-            justify-content: center;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
-        }
-
-        .tab-btn {
-            padding: 8px 16px;
-            font-family: var(--font-heading);
-            font-size: 0.9rem;
-            background: rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.4);
+            padding: 10px 18px;
+            border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.1);
-            color: #aaa;
-            border-radius: 4px;
-            cursor: pointer;
         }
 
-        .tab-btn.active {
-            background: var(--primary);
-            color: #000;
+        .hud-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hud-val {
+            font-family: var(--font-head);
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .hud-lbl {
+            font-size: 0.75rem;
+            color: #88a0c0;
+            text-transform: uppercase;
+        }
+
+        /* TIMER BAR */
+        .timer-box {
+            width: 100%;
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .timer-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.1s linear;
+        }
+
+        /* QUESTION CARDS */
+        .question-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid var(--primary);
+            padding: 18px;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            line-height: 1.4;
+            font-weight: 600;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .options-grid { grid-template-columns: 1fr; }
+            .title-main { font-size: 1.8rem; }
+            .glass-card { padding: 18px; }
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 1rem;
+            color: var(--text);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-btn:hover {
+            background: rgba(0, 255, 204, 0.1);
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .option-btn.correct {
+            background: rgba(0, 255, 204, 0.25) !important;
+            border-color: var(--primary) !important;
+            color: var(--primary) !important;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .option-btn.wrong {
+            background: rgba(255, 0, 85, 0.25) !important;
+            border-color: var(--secondary) !important;
+            color: var(--secondary) !important;
+        }
+
+        .option-tag {
+            background: rgba(255,255,255,0.1);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-head);
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        /* FEEDBACK BOX */
+        .feedback-box {
+            background: rgba(0, 191, 255, 0.1);
+            border: 1px solid var(--info);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback-title {
+            font-family: var(--font-head);
+            font-size: 0.95rem;
+            color: var(--info);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* TABLES & LISTS */
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        .ranking-table th, .ranking-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .ranking-table th {
+            font-family: var(--font-head);
+            color: var(--primary);
+            font-size: 0.85rem;
+        }
+
+        .ranking-table tr:nth-child(1) td { color: var(--accent); font-weight: bold; }
+        .ranking-table tr:nth-child(2) td { color: #e0e0e0; }
+        .ranking-table tr:nth-child(3) td { color: #cd7f32; }
+
+        /* INPUT FIELD */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-size: 0.9rem;
+            color: #88a0c0;
+        }
+
+        .custom-input {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            border-radius: 8px;
+            padding: 12px;
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .custom-input:focus {
             border-color: var(--primary);
             box-shadow: 0 0 10px var(--primary-glow);
         }
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .shop-card, .achieve-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .shop-card:hover {
-            border-color: var(--primary);
-            background: rgba(0,255,204,0.05);
-        }
-
-        .shop-card.selected {
-            border-color: var(--accent);
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-
-        .achieve-card.unlocked {
-            border-color: var(--primary);
-            background: rgba(0, 255, 204, 0.08);
-        }
-
-        .achieve-card.unlocked i {
-            color: var(--primary);
-        }
-
-        .achieve-card i {
-            font-size: 2rem;
-            color: #555;
-        }
+        .hidden { display: none !important; }
 
         /* TOAST NOTIFICATIONS */
         #toast-container {
             position: absolute;
-            bottom: 20px;
+            top: 20px;
             right: 20px;
+            z-index: 100;
             display: flex;
             flex-direction: column;
             gap: 10px;
-            z-index: 100;
             pointer-events: none;
         }
 
         .toast {
-            background: rgba(10, 25, 47, 0.9);
+            background: rgba(13, 25, 48, 0.95);
             border: 1px solid var(--accent);
-            box-shadow: 0 0 15px var(--accent-glow);
+            box-shadow: 0 0 20px var(--accent-glow);
             padding: 12px 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             gap: 12px;
-            animation: slideIn 0.3s ease-out forwards;
+            animation: slideInRight 0.3s ease forwards;
         }
 
-        .toast i {
-            font-size: 1.5rem;
-            color: var(--accent);
-        }
+        .toast i { font-size: 1.6rem; color: var(--accent); }
 
-        @keyframes slideIn {
+        @keyframes slideInRight {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
 
-        /* TOUCH CONTROLS FOR MOBILE */
-        .touch-controls {
-            display: none;
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            width: 100%;
-            padding: 0 20px;
-            justify-content: space-between;
-            align-items: flex-end;
-            z-index: 15;
-            pointer-events: none;
-        }
-
-        .d-pad, .action-pad {
-            display: grid;
-            grid-template-columns: repeat(3, 50px);
-            grid-template-rows: repeat(3, 50px);
-            gap: 5px;
-            pointer-events: auto;
-        }
-
-        .touch-btn {
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            color: #fff;
-            user-select: none;
-        }
-
-        .touch-btn:active {
-            background: var(--primary);
-            color: #000;
-        }
-
-        @media (max-width: 768px) {
-            .touch-controls { display: flex; }
-            .bar-container { width: 140px; }
-            .menu-title { font-size: 2rem; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div id="game-container">
-        <canvas id="gameCanvas"></canvas>
+    <div id="app-container">
+        <!-- Canvas de Partículas / Confeti -->
+        <canvas id="bgCanvas"></canvas>
 
-        <!-- UI LAYER -->
-        <div class="ui-layer">
-            <!-- HUD -->
-            <div id="hud">
-                <div class="hud-card">
-                    <div style="font-size: 0.8rem; letter-spacing: 1px; color: #88a0c0;">SALUD DEL CASCO</div>
-                    <div class="bar-container">
-                        <div id="hp-fill" class="bar-fill"></div>
-                    </div>
-                    <div style="font-size: 0.8rem; letter-spacing: 1px; color: #88a0c0; margin-top: 4px;">ESCUDO ENERGÍA</div>
-                    <div class="bar-container">
-                        <div id="shield-fill" class="bar-fill"></div>
-                    </div>
-                </div>
+        <!-- PANTALLA: MENÚ PRINCIPAL -->
+        <div id="screen-menu" class="glass-card">
+            <h1 class="title-main"><i class="fa-solid fa-atom"></i> ALCANO CHALLENGE</h1>
+            <p class="subtitle">Química Orgánica en Acción | Desafío IUPAC</p>
 
-                <div class="hud-card" style="align-items: flex-end;">
-                    <div class="score-display"><span id="score-text">0</span> PTS</div>
-                    <div id="combo-badge" class="combo-badge">COMBO x<span id="combo-text">1</span>!</div>
-                    <div style="color: var(--accent); font-weight: 700; font-size: 1.1rem; margin-top: 5px;">
-                        <i class="fa-solid fa-gem"></i> <span id="crystals-text">0</span>
-                    </div>
-                </div>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-bottom: 25px;">
+                <button class="btn" onclick="startQuiz()"><i class="fa-solid fa-play"></i> INICIAR DESAFÍO</button>
+                <button class="btn btn-accent" onclick="showRanking()"><i class="fa-solid fa-trophy"></i> TABLA DE POSICIONES (AULA)</button>
+                <button class="btn btn-secondary" onclick="showAchievements()"><i class="fa-solid fa-medal"></i> MIS LOGROS</button>
             </div>
 
-            <!-- TOUCH CONTROLS (Mobile) -->
-            <div class="touch-controls">
-                <div class="d-pad">
-                    <div></div>
-                    <div class="touch-btn" id="btn-up"><i class="fa-solid fa-arrow-up"></i></div>
-                    <div></div>
-                    <div class="touch-btn" id="btn-left"><i class="fa-solid fa-arrow-left"></i></div>
-                    <div></div>
-                    <div class="touch-btn" id="btn-right"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div></div>
-                    <div class="touch-btn" id="btn-down"><i class="fa-solid fa-arrow-down"></i></div>
-                    <div></div>
-                </div>
-                <div class="action-pad" style="grid-template-columns: 70px; grid-template-rows: 70px;">
-                    <div class="touch-btn" id="btn-fire" style="width: 70px; height: 70px; background: rgba(255,0,85,0.3); border-color: var(--secondary);">
-                        <i class="fa-solid fa-crosshairs"></i>
-                    </div>
-                </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border-left: 3px solid var(--accent);">
+                <div style="font-weight:bold; color:var(--accent); margin-bottom: 5px;"><i class="fa-solid fa-lightbulb"></i> Instrucciones:</div>
+                <ul style="font-size: 0.9rem; padding-left: 20px; color: #a0b5d0; line-height: 1.5;">
+                    <li>Responde 10 preguntas organizadas de nivel Básico a Avanzado.</li>
+                    <li>Cuanto más rápido respondas, ¡mayor será tu bonificación de puntos!</li>
+                    <li>Mantén rachas de aciertos para activar multiplicadores de puntaje (**x2, x3**).</li>
+                </ul>
             </div>
         </div>
 
-        <!-- MAIN MENU -->
-        <div id="main-menu" class="modal-screen interactive">
-            <div class="menu-box glass-panel">
-                <h1 class="menu-title">ECO-DEFENDER</h1>
-                <p class="menu-subtitle">Misión Planeta Clean 2D</p>
+        <!-- PANTALLA: JUEGO / QUIZ -->
+        <div id="screen-quiz" class="glass-card hidden">
+            <!-- HUD Superior -->
+            <div class="hud-header">
+                <div class="hud-stat">
+                    <span class="hud-lbl">Dificultad</span>
+                    <span id="hud-level" class="hud-val" style="font-size:1rem; color:var(--accent)">Básica</span>
+                </div>
+                <div class="hud-stat">
+                    <span class="hud-lbl">Pregunta</span>
+                    <span class="hud-val"><span id="hud-current">1</span>/10</span>
+                </div>
+                <div class="hud-stat">
+                    <span class="hud-lbl">Racha</span>
+                    <span id="hud-combo" class="hud-val" style="color:var(--accent)">x1</span>
+                </div>
+                <div class="hud-stat">
+                    <span class="hud-lbl">Puntos</span>
+                    <span id="hud-score" class="hud-val">0</span>
+                </div>
+            </div>
+
+            <!-- Barra de tiempo -->
+            <div class="timer-box">
+                <div id="timer-bar" class="timer-fill"></div>
+            </div>
+
+            <!-- Pregunta -->
+            <div class="question-box">
+                <div id="question-text" class="question-text">Cargando pregunta...</div>
+            </div>
+
+            <!-- Opciones -->
+            <div id="options-container" class="options-grid"></div>
+
+            <!-- Retroalimentación pedagógica -->
+            <div id="feedback-box" class="feedback-box">
+                <div class="feedback-title"><i class="fa-solid fa-graduation-cap"></i> Explicación Química:</div>
+                <div id="feedback-text" style="font-size:0.95rem; color:#d0e5ff; line-height:1.4;"></div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end;">
+                <button id="next-btn" class="btn hidden" onclick="nextQuestion()">SIGUIENTE <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- PANTALLA: RESULTADOS -->
+        <div id="screen-results" class="glass-card hidden">
+            <h2 class="title-main" style="font-size: 2rem;">¡DESAFÍO COMPLETADO!</h2>
+            <p class="subtitle">Revisa tu rendimiento académico</p>
+
+            <div style="background: rgba(0,0,0,0.4); padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: center;">
+                <div style="font-size: 0.9rem; color: #88a0c0;">PUNTAJE TOTAL OBTENIDO</div>
+                <div id="final-score" style="font-family: var(--font-head); font-size: 3rem; color: var(--primary); text-shadow: 0 0 20px var(--primary-glow);">0</div>
                 
-                <div style="margin: 15px 0;">
-                    <button id="start-btn" class="btn" style="width: 100%; font-size: 1.2rem; padding: 15px;"><i class="fa-solid fa-play"></i> INICIAR MISIÓN</button>
-                </div>
-
-                <div class="tab-nav">
-                    <button class="tab-btn active" onclick="switchTab('shop')"><i class="fa-solid fa-rocket"></i> Hangar & Tienda</button>
-                    <button class="tab-btn" onclick="switchTab('achievements')"><i class="fa-solid fa-trophy"></i> Logros</button>
-                    <button class="tab-btn" onclick="switchTab('stats')"><i class="fa-solid fa-chart-line"></i> Estadísticas</button>
-                </div>
-
-                <!-- TAB CONTENT: SHOP -->
-                <div id="tab-shop" class="tab-content">
-                    <div style="margin-bottom: 10px; font-weight: bold; color: var(--accent);">
-                        Cristales Disponibles: <i class="fa-solid fa-gem"></i> <span id="shop-crystals">0</span>
+                <div style="display:flex; justify-content:space-around; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">
+                    <div>
+                        <div style="font-size:0.8rem; color:#88a0c0;">Aciertos</div>
+                        <div id="final-hits" style="font-weight:bold; font-size:1.2rem; color:var(--primary);">0/10</div>
                     </div>
-                    <div class="grid-container" id="ships-grid"></div>
-                </div>
-
-                <!-- TAB CONTENT: ACHIEVEMENTS -->
-                <div id="tab-achievements" class="tab-content hidden">
-                    <div class="grid-container" id="achievements-grid"></div>
-                </div>
-
-                <!-- TAB CONTENT: STATS -->
-                <div id="tab-stats" class="tab-content hidden">
-                    <div style="display: flex; flex-direction: column; gap: 10px; text-align: left; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
-                        <div>Puntuación Máxima: <strong id="stat-highscore" style="color:var(--primary)">0</strong></div>
-                        <div>Total Partidas Jugadas: <strong id="stat-games">0</strong></div>
-                        <div>Basura Espacial Eliminada: <strong id="stat-trash">0</strong></div>
-                        <div>Cristales Recolectados: <strong id="stat-crystals">0</strong></div>
+                    <div>
+                        <div style="font-size:0.8rem; color:#88a0c0;">Máxima Racha</div>
+                        <div id="final-streak" style="font-weight:bold; font-size:1.2rem; color:var(--accent);">x1</div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- GAME OVER MODAL -->
-        <div id="game-over-menu" class="modal-screen interactive hidden">
-            <div class="menu-box glass-panel">
-                <h2 class="menu-title" style="color: var(--secondary);">MISIÓN FALLIDA</h2>
-                <p id="game-over-reason" style="color: #aaa;">Tu nave fue destruida por desechos.</p>
-                
-                <div style="background: rgba(0,0,0,0.4); padding: 20px; border-radius: 8px; margin: 15px 0;">
-                    <div style="font-size: 1.2rem; margin-bottom: 8px;">Puntuación Final: <strong id="go-score" style="color:var(--primary);">0</strong></div>
-                    <div style="font-size: 1rem; color: var(--accent);">Cristales Ganados: +<span id="go-crystals">0</span></div>
-                    <div style="font-size: 0.9rem; color: #88a0c0; margin-top: 5px;">Max Combo: <span id="go-combo">x1</span></div>
-                </div>
+            <!-- Registro en Ranking -->
+            <div class="input-group">
+                <label for="student-name"><i class="fa-solid fa-user"></i> Tu Nombre Completo:</label>
+                <input type="text" id="student-name" class="custom-input" placeholder="Ej: Maria Lopez" maxlength="25">
+            </div>
 
-                <div style="display: flex; gap: 10px; justify-content: center;">
-                    <button id="restart-btn" class="btn"><i class="fa-solid fa-rotate-right"></i> REINTENTAR</button>
-                    <button id="menu-btn" class="btn btn-secondary"><i class="fa-solid fa-house"></i> MENÚ</button>
-                </div>
+            <div class="input-group">
+                <label for="student-section"><i class="fa-solid fa-school"></i> Grado / Sección:</label>
+                <input type="text" id="student-section" class="custom-input" placeholder="Ej: 4to Sec - A" maxlength="20">
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top: 20px;">
+                <button id="save-score-btn" class="btn" style="flex:1;" onclick="saveResult()"><i class="fa-solid fa-floppy-disk"></i> GUARDAR EN RANKING</button>
+                <button class="btn btn-secondary" onclick="showMenu()"><i class="fa-solid fa-house"></i> MENÚ</button>
             </div>
         </div>
 
-        <!-- TOAST CONTAINER -->
+        <!-- PANTALLA: RANKING -->
+        <div id="screen-ranking" class="glass-card hidden">
+            <h2 class="title-main" style="font-size:2rem;"><i class="fa-solid fa-trophy"></i> TABLA DE POSICIONES</h2>
+            <p class="subtitle">Los mejores químicos de la clase</p>
+
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th>POS</th>
+                            <th>ESTUDIANTE</th>
+                            <th>GRADO</th>
+                            <th>PUNTOS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranking-body">
+                        <!-- Carga dinámica -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 25px; text-align: center;">
+                <button class="btn" onclick="showMenu()"><i class="fa-solid fa-arrow-left"></i> VOLVER AL MENÚ</button>
+            </div>
+        </div>
+
+        <!-- PANTALLA: LOGROS -->
+        <div id="screen-achievements" class="glass-card hidden">
+            <h2 class="title-main" style="font-size:2rem;"><i class="fa-solid fa-medal"></i> INSIGNIAS QUÍMICAS</h2>
+            <p class="subtitle">Recompensas desbloqueables por conocimientos</p>
+
+            <div id="achievements-container" style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; max-height:300px; overflow-y:auto;">
+                <!-- Carga dinámica -->
+            </div>
+
+            <div style="margin-top: 25px; text-align: center;">
+                <button class="btn" onclick="showMenu()"><i class="fa-solid fa-arrow-left"></i> VOLVER AL MENÚ</button>
+            </div>
+        </div>
+
+        <!-- Contenedor Toast -->
         <div id="toast-container"></div>
     </div>
 
     <script>
         /* ==========================================================================
-           1. AUDIO SYNTHESIZER (Web Audio API)
+           1. AUDIO SYNTHESIZER (Sintetizador sin archivos externos)
            ========================================================================== */
-        class SoundFX {
-            constructor() {
-                this.ctx = null;
-            }
+        class ChemicalSound {
+            constructor() { this.ctx = null; }
 
             init() {
                 if (!this.ctx) {
@@ -537,167 +554,466 @@
                 }
             }
 
-            playShoot() {
+            playCorrect() {
                 if (!this.ctx) return;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(800, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 0.15);
-            }
-
-            playExplosion() {
-                if (!this.ctx) return;
-                const bufferSize = this.ctx.sampleRate * 0.3;
-                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    data[i] = Math.random() * 2 - 1;
-                }
-                const noise = this.ctx.createBufferSource();
-                noise.buffer = buffer;
-
-                const filter = this.ctx.createBiquadFilter();
-                filter.type = 'lowpass';
-                filter.frequency.setValueAtTime(800, this.ctx.currentTime);
-                filter.frequency.linearRampToValueAtTime(50, this.ctx.currentTime + 0.3);
-
-                const gain = this.ctx.createGain();
-                gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
-
-                noise.connect(filter);
-                filter.connect(gain);
-                gain.connect(this.ctx.destination);
-                noise.start();
-            }
-
-            playPickup() {
-                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
                 const osc = this.ctx.createOscillator();
                 const gain = this.ctx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.12);
-                gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.exponentialRampToValueAtTime(880, now + 0.15); // A5
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
                 osc.start();
-                osc.stop(this.ctx.currentTime + 0.12);
+                osc.stop(now + 0.15);
+            }
+
+            playWrong() {
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.linearRampToValueAtTime(110, now + 0.2);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(now + 0.2);
             }
 
             playAchievement() {
                 if (!this.ctx) return;
                 const now = this.ctx.currentTime;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'triangle';
-                
-                osc.frequency.setValueAtTime(523.25, now); // C5
-                osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
-                osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
-                osc.frequency.setValueAtTime(1046.50, now + 0.3); // C6
-
-                gain.gain.setValueAtTime(0.3, now);
-                gain.gain.linearRampToValueAtTime(0.01, now + 0.5);
-
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(now + 0.5);
+                const notes = [440, 554.37, 659.25, 880];
+                notes.forEach((freq, i) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.2, now + i * 0.08);
+                    gain.gain.linearRampToValueAtTime(0.01, now + i * 0.08 + 0.2);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now + i * 0.08);
+                    osc.stop(now + i * 0.08 + 0.2);
+                });
             }
         }
 
-        const audio = new SoundFX();
+        const audio = new ChemicalSound();
 
         /* ==========================================================================
-           2. GAME DATA & PROGRESSION (LocalStorage)
+           2. BANCO DE PREGUNTAS (QUÍMICA DE ALCANOS)
            ========================================================================== */
-        const SHIPS = [
-            { id: 'basic', name: 'Eco-Scout', price: 0, speed: 6, hp: 100, fireRate: 200, color: '#00ffcc', unlocked: true },
-            { id: 'defender', name: 'Aegis Shield', price: 100, speed: 4.5, hp: 180, fireRate: 250, color: '#0088ff', unlocked: false },
-            { id: 'speeder', name: 'Plasma Dart', price: 250, speed: 8.5, hp: 80, fireRate: 130, color: '#ffe600', unlocked: false },
-            { id: 'destroyer', name: 'Clean Blaster', price: 500, speed: 6, hp: 120, fireRate: 90, color: '#ff0055', unlocked: false }
+        const QUESTIONS_BANK = [
+            // NIVEL BÁSICO
+            {
+                level: "Básica",
+                question: "¿Cuál es la fórmula general de los alcanos de cadena abierta?",
+                options: ["C_n H_{2n}", "C_n H_{2n+2}", "C_n H_{2n-2}", "C_n H_n"],
+                correct: 1,
+                explanation: "Los alcanos son hidrocarburos saturados con enlaces sencillos C-C. Su fórmula general es C_n H_{2n+2}, donde n es el número de átomos de carbono."
+            },
+            {
+                level: "Básica",
+                question: "¿Qué prefijo IUPAC indica una cadena principal de 3 átomos de Carbono?",
+                options: ["Et-", "Met-", "But-", "Prop-"],
+                correct: 3,
+                explanation: "Los prefijos para los 4 primeros alcanos son: Met- (1C), Et- (2C), Prop- (3C) y But- (4C). Por ende, 3 carbonos corresponden a Propano."
+            },
+            {
+                level: "Básica",
+                question: "¿Cómo se llama el alcano de 1 solo átomo de carbono, principal componente del gas natural?",
+                options: ["Metano (CH₄)", "Etano (C₂H₆)", "Propano (C₃H₈)", "Butano (C₄H₁₀)"],
+                correct: 0,
+                explanation: "El Metano (CH₄) es el alcano más sencillo y es el componente mayoritario del gas natural de uso hogareño e industrial."
+            },
+
+            // NIVEL INTERMEDIO (Nomenclatura IUPAC y Radicales)
+            {
+                level: "Intermedia",
+                question: "Si a un alcano se le retira un átomo de hidrógeno, se convierte en un radical alquilo. ¿Cómo se nombra el radical derivado del etano (CH₃-CH₃)?",
+                options: ["Metilo (-CH₃)", "Etilo (-C₂H₅)", "Propilo (-C₃H₇)", "Vinilo (-CH=CH₂)"],
+                correct: 1,
+                explanation: "La terminación -ano se sustituye por -ilo o -il. El etano al perder 1 H forma el radical etilo (-CH₂-CH₃)."
+            },
+            {
+                level: "Intermedia",
+                question: "¿Cuál es el nombre IUPAC correcto para un alcano lineal de 7 carbonos?",
+                options: ["Hexano", "Septano", "Heptano", "Octano"],
+                correct: 2,
+                explanation: "El prefijo IUPAC para 7 átomos de carbono es 'Hept-'. Por tanto, la molécula se denomina Heptano (C₇H₁₆)."
+            },
+            {
+                level: "Intermedia",
+                question: "Según la IUPAC, ¿por qué extremo se debe comenzar a numerar la cadena principal de un alcano ramificado?",
+                options: [
+                    "Por el extremo más cercano al primer sustituyente / ramificación.",
+                    "Siempre de izquierda a derecha sin excepción.",
+                    "Por el carbono que tenga más hidrógenos.",
+                    "Por el centro de la molécula."
+                ],
+                correct: 0,
+                explanation: "La regla IUPAC indica que la cadena principal se numera desde el extremo que otorgue los localizadores más bajos a los sustituyentes o ramificaciones."
+            },
+            {
+                level: "Intermedia",
+                question: "¿Cuál es el nombre IUPAC de la molécula: CH₃-CH(CH₃)-CH₂-CH₃?",
+                options: ["2-metilbutano", "3-metilbutano", "Pentano", "2-dimetilpropano"],
+                correct: 0,
+                explanation: "La cadena principal tiene 4 carbonos (butano) y numerando desde la izquierda, la ramificación metil queda en el carbono 2."
+            },
+
+            // NIVEL AVANZADO (Propiedades físicas, Combustión y Uso)
+            {
+                level: "Avanzada",
+                question: "¿Por qué los alcanos son insolubles en agua y flotan en ella?",
+                options: [
+                    "Porque forman puentes de hidrógeno muy fuertes.",
+                    "Porque son moléculas no polares de menor densidad que el agua.",
+                    "Porque reaccionan violentamente al tocar el agua.",
+                    "Porque tienen elevadas cargas iónicas superficiales."
+                ],
+                correct: 1,
+                explanation: "Los alcanos poseen enlaces C-C y C-H de muy baja polaridad (no polares), por lo que no se disuelven en un solvente polar como el agua."
+            },
+            {
+                level: "Avanzada",
+                question: "En una reacción de combustión COMPLETA de un alcano con exceso de O₂, ¿cuáles son los productos principales?",
+                options: [
+                    "Carbono puro (hollín) y Agua (H₂O)",
+                    "Dióxido de Carbono (CO₂) y Agua (H₂O)",
+                    "Monóxido de Carbono (CO) y Gas Hidrógeno (H₂)",
+                    "Ácido Carbónico e Hidróxido"
+                ],
+                correct: 1,
+                explanation: "La combustión completa de cualquier hidrocarburo saturado consume oxígeno produciendo calor, Dióxido de Carbono (CO₂) y agua en estado de vapor (H₂O)."
+            },
+            {
+                level: "Avanzada",
+                question: "¿Cuál es el estado físico a temperatura ambiente (25°C) de los alcanos lineales de 1 a 4 carbonos (Metano a Butano)?",
+                options: ["Sólidos", "Líquidos viscosos", "Gaseosos", "Plasma"],
+                correct: 2,
+                explanation: "Los cuatro primeros alcanos (C1 a C4) son gases debido a sus débiles fuerzas de Van der Waals. De C5 a C17 son líquidos y de C18 en adelante son sólidos wajosos."
+            }
         ];
 
-        const ACHIEVEMENTS = [
-            { id: 'first_clean', title: 'Primera Limpieza', desc: 'Destruye 10 objetos de basura', icon: 'fa-broom', unlocked: false, req: (s) => s.trash >= 10 },
-            { id: 'combo_master', title: 'Francotirador', desc: 'Consigue un combo x5', icon: 'fa-bolt', unlocked: false, req: (s) => s.maxCombo >= 5 },
-            { id: 'score_1k', title: 'Planeta Salvo', desc: 'Alcanza 1,000 puntos', icon: 'fa-star', unlocked: false, req: (s) => s.highScore >= 1000 },
-            { id: 'collector', title: 'Minero Espacial', desc: 'Recolecta 50 cristales', icon: 'fa-gem', unlocked: false, req: (s) => s.crystals >= 50 }
+        /* ==========================================================================
+           3. LOGROS / MEDALLAS Y DATOS PERSISTENTES
+           ========================================================================== */
+        const ACHIEVEMENTS_LIST = [
+            { id: 'first_quiz', title: 'Iniciación Química', desc: 'Completa tu primer juego', icon: 'fa-vial' },
+            { id: 'perfect_streak', title: 'Cadena Perfecta', desc: 'Consigue una racha de x3 o más', icon: 'fa-fire' },
+            { id: 'iupac_master', title: 'Maestro IUPAC', desc: 'Obtén 800+ puntos en una partida', icon: 'fa-award' },
+            { id: 'speed_demon', title: 'Reacción Rápida', desc: 'Responde una pregunta en menos de 4s', icon: 'fa-bolt' }
         ];
 
-        let playerData = {
-            crystals: 0,
+        let gameStats = {
             highScore: 0,
-            gamesPlayed: 0,
-            trashDestroyed: 0,
-            maxCombo: 1,
-            selectedShip: 'basic',
-            unlockedShips: ['basic'],
             unlockedAchievements: []
         };
 
-        function loadData() {
-            const saved = localStorage.getItem('eco_defender_data');
-            if (saved) {
-                try {
-                    playerData = { ...playerData, ...JSON.parse(saved) };
-                } catch(e) { console.error("Error loading save", e); }
+        function loadSavedData() {
+            const data = localStorage.getItem('alcano_challenge_data');
+            if (data) {
+                try { gameStats = { ...gameStats, ...JSON.parse(data) }; } catch(e){}
             }
-            // Update structures
-            SHIPS.forEach(s => s.unlocked = playerData.unlockedShips.includes(s.id));
-            ACHIEVEMENTS.forEach(a => a.unlocked = playerData.unlockedAchievements.includes(a.id));
         }
 
         function saveData() {
-            localStorage.setItem('eco_defender_data', JSON.stringify(playerData));
+            localStorage.setItem('alcano_challenge_data', JSON.stringify(gameStats));
         }
 
-        function checkAchievements(currentSessionStats) {
-            let tempStats = {
-                trash: playerData.trashDestroyed,
-                maxCombo: Math.max(playerData.maxCombo, currentSessionStats.combo || 0),
-                highScore: Math.max(playerData.highScore, currentSessionStats.score || 0),
-                crystals: playerData.crystals
-            };
-
-            ACHIEVEMENTS.forEach(ach => {
-                if (!ach.unlocked && ach.req(tempStats)) {
-                    ach.unlocked = true;
-                    playerData.unlockedAchievements.push(ach.id);
+        function unlockAchievement(id) {
+            if (!gameStats.unlockedAchievements.includes(id)) {
+                gameStats.unlockedAchievements.push(id);
+                saveData();
+                const ach = ACHIEVEMENTS_LIST.find(a => a.id === id);
+                if (ach) {
                     showToast(ach.title, ach.desc);
                     audio.playAchievement();
-                    saveData();
+                    triggerConfetti();
                 }
-            });
+            }
         }
 
         function showToast(title, desc) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
-            toast.innerHTML = `<i class="fa-solid fa-trophy"></i><div><strong style="color:#fff;display:block;">${title}</strong><span style="font-size:0.85rem;color:#aaa;">${desc}</span></div>`;
+            toast.innerHTML = `<i class="fa-solid fa-medal"></i><div><strong style="color:#fff;display:block;">${title}</strong><span style="font-size:0.85rem;color:#aaa;">${desc}</span></div>`;
             container.appendChild(toast);
             setTimeout(() => {
                 toast.style.opacity = '0';
-                toast.style.transition = 'opacity 0.5s';
-                setTimeout(() => toast.remove(), 500);
-            }, 4000);
+                toast.style.transition = 'opacity 0.4s';
+                setTimeout(() => toast.remove(), 400);
+            }, 3500);
         }
 
         /* ==========================================================================
-           3. GAME ENGINE & CANVAS LOGIC
+           4. LÓGICA PRINCIPAL DEL JUEGO
            ========================================================================== */
-        const canvas = document.getElementById('gameCanvas');
+        let currentQuestionIdx = 0;
+        let score = 0;
+        let combo = 1;
+        let hitsCount = 0;
+        let maxCombo = 1;
+        let timerInterval = null;
+        let timeLeft = 15; // Segundos por pregunta
+        const MAX_TIME = 15;
+
+        function showScreen(screenId) {
+            ['screen-menu', 'screen-quiz', 'screen-results', 'screen-ranking', 'screen-achievements'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function showMenu() { showScreen('screen-menu'); }
+
+        function startQuiz() {
+            audio.init();
+            currentQuestionIdx = 0;
+            score = 0;
+            combo = 1;
+            hitsCount = 0;
+            maxCombo = 1;
+            showScreen('screen-quiz');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = QUESTIONS_BANK[currentQuestionIdx];
+
+            // Reset UI
+            document.getElementById('hud-current').innerText = currentQuestionIdx + 1;
+            document.getElementById('hud-level').innerText = q.level;
+            document.getElementById('hud-score').innerText = score;
+            document.getElementById('hud-combo').innerText = `x${combo}`;
+            document.getElementById('question-text').innerText = q.question;
+            document.getElementById('feedback-box').style.display = 'none';
+            document.getElementById('next-btn').classList.add('hidden');
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            const tags = ['A', 'B', 'C', 'D'];
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span class="option-tag">${tags[idx]}</span> <span>${opt}</span>`;
+                btn.onclick = () => selectOption(idx);
+                container.appendChild(btn);
+            });
+
+            // Iniciar temporizador
+            resetTimer();
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timeLeft = MAX_TIME;
+            const bar = document.getElementById('timer-bar');
+            bar.style.width = '100%';
+
+            timerInterval = setInterval(() => {
+                timeLeft -= 0.1;
+                const pct = Math.max(0, (timeLeft / MAX_TIME) * 100);
+                bar.style.width = `${pct}%`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timeOutHandler();
+                }
+            }, 100);
+        }
+
+        function selectOption(selectedIdx) {
+            clearInterval(timerInterval);
+            const q = QUESTIONS_BANK[currentQuestionIdx];
+            const buttons = document.querySelectorAll('.option-btn');
+
+            // Deshabilitar botones
+            buttons.forEach(b => b.style.pointerEvents = 'none');
+
+            if (selectedIdx === q.correct) {
+                // Correcto
+                buttons[selectedIdx].classList.add('correct');
+                audio.playCorrect();
+                hitsCount++;
+
+                // Puntos base (100) + Bono por velocidad (hasta 50) multiplicados por combo
+                const speedBonus = Math.round((timeLeft / MAX_TIME) * 50);
+                const pointsEarned = (100 + speedBonus) * combo;
+                score += pointsEarned;
+
+                // Logro de velocidad
+                if (MAX_TIME - timeLeft <= 4) {
+                    unlockAchievement('speed_demon');
+                }
+
+                combo++;
+                if (combo > maxCombo) maxCombo = combo;
+                if (combo >= 3) unlockAchievement('perfect_streak');
+
+                triggerConfetti(20);
+            } else {
+                // Incorrecto
+                if (selectedIdx !== null) {
+                    buttons[selectedIdx].classList.add('wrong');
+                }
+                buttons[q.correct].classList.add('correct');
+                audio.playWrong();
+                combo = 1; // Resetea la racha
+            }
+
+            // Actualizar HUD
+            document.getElementById('hud-score').innerText = score;
+            document.getElementById('hud-combo').innerText = `x${combo}`;
+
+            // Explicación pedagógica
+            document.getElementById('feedback-text').innerText = q.explanation;
+            document.getElementById('feedback-box').style.display = 'block';
+
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function timeOutHandler() {
+            selectOption(null); // Trata tiempo agotado como fallo
+        }
+
+        function nextQuestion() {
+            currentQuestionIdx++;
+            if (currentQuestionIdx < QUESTIONS_BANK.length) {
+                loadQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            showScreen('screen-results');
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('final-hits').innerText = `${hitsCount}/10`;
+            document.getElementById('final-streak').innerText = `x${maxCombo}`;
+
+            // Actualizar HighScore
+            if (score > gameStats.highScore) {
+                gameStats.highScore = score;
+                saveData();
+            }
+
+            // Verificar Logros
+            unlockAchievement('first_quiz');
+            if (score >= 800) unlockAchievement('iupac_master');
+
+            triggerConfetti(60);
+        }
+
+        /* ==========================================================================
+           5. GESTIÓN DEL RANKING LOCAL (localStorage)
+           ========================================================================== */
+        function saveResult() {
+            const nameInput = document.getElementById('student-name').value.trim();
+            const sectionInput = document.getElementById('student-section').value.trim();
+
+            if (!nameInput) {
+                alert("Por favor, ingresa tu nombre para figurar en la tabla del aula.");
+                return;
+            }
+
+            const ranking = JSON.parse(localStorage.getItem('alcano_ranking') || '[]');
+            ranking.push({
+                name: nameInput,
+                section: sectionInput || 'N/A',
+                score: score,
+                date: new Date().toLocaleDateString()
+            });
+
+            // Ordenar descendentemente por puntaje
+            ranking.sort((a, b) => b.score - a.score);
+
+            // Guardar solo el Top 20
+            localStorage.setItem('alcano_ranking', JSON.stringify(ranking.slice(0, 20)));
+
+            document.getElementById('save-score-btn').disabled = true;
+            document.getElementById('save-score-btn').innerText = "¡GUARDADO!";
+
+            setTimeout(() => {
+                showRanking();
+                document.getElementById('save-score-btn').disabled = false;
+                document.getElementById('save-score-btn').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> GUARDAR EN RANKING`;
+            }, 800);
+        }
+
+        function showRanking() {
+            showScreen('screen-ranking');
+            const tbody = document.getElementById('ranking-body');
+            tbody.innerHTML = '';
+
+            const ranking = JSON.parse(localStorage.getItem('alcano_ranking') || '[]');
+
+            if (ranking.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#88a0c0;">No hay resultados registrados aún en el aula.</td></tr>`;
+                return;
+            }
+
+            ranking.forEach((r, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>#${idx + 1}</td>
+                    <td>${escapeHtml(r.name)}</td>
+                    <td>${escapeHtml(r.section)}</td>
+                    <td><strong>${r.score} pts</strong></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function showAchievements() {
+            showScreen('screen-achievements');
+            const container = document.getElementById('achievements-container');
+            container.innerHTML = '';
+
+            ACHIEVEMENTS_LIST.forEach(ach => {
+                const unlocked = gameStats.unlockedAchievements.includes(ach.id);
+                const card = document.createElement('div');
+                card.style.cssText = `
+                    background: ${unlocked ? 'rgba(0, 255, 204, 0.08)' : 'rgba(255,255,255,0.02)'};
+                    border: 1px solid ${unlocked ? 'var(--primary)' : 'rgba(255,255,255,0.1)'};
+                    border-radius: 10px;
+                    padding: 12px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    opacity: ${unlocked ? '1' : '0.5'};
+                `;
+                card.innerHTML = `
+                    <i class="fa-solid ${ach.icon}" style="font-size: 1.8rem; color: ${unlocked ? 'var(--primary)' : '#555'};"></i>
+                    <div>
+                        <div style="font-weight:bold; font-size:0.95rem; color:${unlocked ? '#fff' : '#aaa'}">${ach.title}</div>
+                        <div style="font-size:0.8rem; color:#88a0c0;">${ach.desc}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        /* ==========================================================================
+           6. CANVAS DE FONDO Y CONFETI (Visuales Neón 2D)
+           ========================================================================== */
+        const canvas = document.getElementById('bgCanvas');
         const ctx = canvas.getContext('2d');
+        let particles = [];
+        let confetti = [];
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -706,76 +1022,26 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Input state
-        const keys = {};
-        window.addEventListener('keydown', e => keys[e.code] = true);
-        window.addEventListener('keyup', e => keys[e.code] = false);
-
-        // Mobile Controls setup
-        const bindTouch = (id, keyName) => {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.addEventListener('touchstart', (e) => { e.preventDefault(); keys[keyName] = true; });
-            el.addEventListener('touchend', (e) => { e.preventDefault(); keys[keyName] = false; });
-        };
-        bindTouch('btn-up', 'KeyW');
-        bindTouch('btn-down', 'KeyS');
-        bindTouch('btn-left', 'KeyA');
-        bindTouch('btn-right', 'KeyD');
-        bindTouch('btn-fire', 'Space');
-
-        // Starfield Parallax Background
-        class Starfield {
+        // Partículas químicas flotantes en el fondo
+        class BackgroundParticle {
             constructor() {
-                this.stars = Array.from({ length: 150 }, () => ({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2,
-                    speed: Math.random() * 1.5 + 0.2,
-                    opacity: Math.random()
-                }));
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = -Math.random() * 0.8 - 0.2;
+                this.opacity = Math.random() * 0.5 + 0.2;
             }
             update() {
-                this.stars.forEach(s => {
-                    s.y += s.speed;
-                    if (s.y > canvas.height) {
-                        s.y = 0;
-                        s.x = Math.random() * canvas.width;
-                    }
-                });
-            }
-            draw() {
-                ctx.fillStyle = '#ffffff';
-                this.stars.forEach(s => {
-                    ctx.globalAlpha = s.opacity;
-                    ctx.fillRect(s.x, s.y, s.size, s.size);
-                });
-                ctx.globalAlpha = 1.0;
-            }
-        }
-
-        // Particle System
-        class Particle {
-            constructor(x, y, color, speed, size, life) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                const angle = Math.random() * Math.PI * 2;
-                this.vx = Math.cos(angle) * (Math.random() * speed);
-                this.vy = Math.sin(angle) * (Math.random() * speed);
-                this.size = size;
-                this.maxLife = life;
-                this.life = life;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.life--;
+                this.y += this.speedY;
+                if (this.y < -10) {
+                    this.y = canvas.height + 10;
+                    this.x = Math.random() * canvas.width;
+                }
             }
             draw() {
                 ctx.save();
-                ctx.globalAlpha = this.life / this.maxLife;
-                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = '#00ffcc';
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -783,515 +1049,63 @@
             }
         }
 
-        // Player Ship Entity
-        class Player {
-            constructor(shipConfig) {
+        // Partículas de Confeti al celebrar
+        class ConfettiParticle {
+            constructor() {
                 this.x = canvas.width / 2;
-                this.y = canvas.height - 100;
-                this.radius = 20;
-                this.config = shipConfig;
-                this.vx = 0;
-                this.vy = 0;
-                this.friction = 0.92;
-                this.hp = shipConfig.hp;
-                this.maxHp = shipConfig.hp;
-                this.shield = 50;
-                this.maxShield = 50;
-                this.lastShot = 0;
+                this.y = canvas.height / 2;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 8 + 2;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed - 2;
+                this.color = ['#00ffcc', '#ff0055', '#ffe600', '#00bfff'][Math.floor(Math.random() * 4)];
+                this.size = Math.random() * 6 + 4;
+                this.life = 60;
             }
-
             update() {
-                const accel = 0.8;
-                if (keys['KeyW'] || keys['ArrowUp']) this.vy -= accel;
-                if (keys['KeyS'] || keys['ArrowDown']) this.vy += accel;
-                if (keys['KeyA'] || keys['ArrowLeft']) this.vx -= accel;
-                if (keys['KeyD'] || keys['ArrowRight']) this.vx += accel;
-
-                // Apply velocity and friction
-                this.vx *= this.friction;
-                this.vy *= this.friction;
                 this.x += this.vx;
                 this.y += this.vy;
-
-                // Screen boundaries
-                this.x = Math.max(this.radius, Math.min(canvas.width - this.radius, this.x));
-                this.y = Math.max(this.radius, Math.min(canvas.height - this.radius, this.y));
-
-                // Shield Regeneration
-                if (this.shield < this.maxShield) {
-                    this.shield += 0.05;
-                }
-
-                // Thruster Particles
-                if (Math.abs(this.vx) > 0.5 || Math.abs(this.vy) > 0.5) {
-                    particles.push(new Particle(
-                        this.x + (Math.random() - 0.5) * 10,
-                        this.y + 18,
-                        this.config.color,
-                        2, Math.random() * 4 + 1, 15
-                    ));
-                }
-
-                // Shooting
-                if ((keys['Space'] || keys['KeyZ']) && Date.now() - this.lastShot > this.config.fireRate) {
-                    this.shoot();
-                    this.lastShot = Date.now();
-                }
-            }
-
-            shoot() {
-                audio.playShoot();
-                bullets.push(new Bullet(this.x, this.y - 15, this.config.color));
-            }
-
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-
-                // Shield effect
-                if (this.shield > 5) {
-                    ctx.strokeStyle = `rgba(0, 136, 255, ${this.shield / this.maxShield * 0.6})`;
-                    ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.arc(0, 0, this.radius + 6, 0, Math.PI * 2);
-                    ctx.stroke();
-                }
-
-                // Ship Body
-                ctx.fillStyle = this.config.color;
-                ctx.shadowColor = this.config.color;
-                ctx.shadowBlur = 12;
-
-                ctx.beginPath();
-                ctx.moveTo(0, -this.radius);
-                ctx.lineTo(-this.radius, this.radius);
-                ctx.lineTo(0, this.radius * 0.6);
-                ctx.lineTo(this.radius, this.radius);
-                ctx.closePath();
-                ctx.fill();
-
-                ctx.restore();
-            }
-        }
-
-        // Bullet Entity
-        class Bullet {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.speed = 14;
-                this.radius = 4;
-                this.color = color;
-                this.markedForDeletion = false;
-            }
-            update() {
-                this.y -= this.speed;
-                if (this.y < -10) this.markedForDeletion = true;
+                this.vy += 0.15; // Gravedad
+                this.life--;
             }
             draw() {
                 ctx.save();
+                ctx.globalAlpha = this.life / 60;
                 ctx.fillStyle = this.color;
-                ctx.shadowColor = this.color;
-                ctx.shadowBlur = 8;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.fillRect(this.x, this.y, this.size, this.size);
                 ctx.restore();
             }
         }
 
-        // Debris / Hazard Entity
-        class Obstacle {
-            constructor() {
-                this.x = Math.random() * (canvas.width - 40) + 20;
-                this.y = -30;
-                this.type = Math.random() > 0.3 ? 'trash' : 'asteroid'; // 70% Trash, 30% Asteroid
-                this.radius = this.type === 'trash' ? 16 : 26;
-                this.speed = Math.random() * 2 + 1.5;
-                this.rotation = 0;
-                this.rotSpeed = (Math.random() - 0.5) * 0.05;
-                this.hp = this.type === 'trash' ? 1 : 3;
-                this.markedForDeletion = false;
-            }
-            update() {
-                this.y += this.speed;
-                this.rotation += this.rotSpeed;
-                if (this.y > canvas.height + 40) this.markedForDeletion = true;
-            }
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation);
-
-                if (this.type === 'trash') {
-                    // Space Trash (Satellite/Barrel style)
-                    ctx.fillStyle = '#99aa88';
-                    ctx.strokeStyle = '#556644';
-                    ctx.lineWidth = 2;
-                    ctx.fillRect(-12, -12, 24, 24);
-                    ctx.strokeRect(-12, -12, 24, 24);
-                } else {
-                    // Asteroid
-                    ctx.fillStyle = '#555566';
-                    ctx.strokeStyle = '#777788';
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.stroke();
-                }
-
-                ctx.restore();
-            }
+        for (let i = 0; i < 70; i++) {
+            particles.push(new BackgroundParticle());
         }
 
-        // Energy Crystal Entity
-        class Crystal {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.radius = 10;
-                this.speed = 1.5;
-                this.markedForDeletion = false;
-                this.pulse = 0;
-            }
-            update() {
-                this.y += this.speed;
-                this.pulse += 0.08;
-                if (this.y > canvas.height + 20) this.markedForDeletion = true;
-            }
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                const scale = 1 + Math.sin(this.pulse) * 0.15;
-                ctx.scale(scale, scale);
-                ctx.fillStyle = '#ffe600';
-                ctx.shadowColor = '#ffe600';
-                ctx.shadowBlur = 10;
-                
-                // Diamond Shape
-                ctx.beginPath();
-                ctx.moveTo(0, -10);
-                ctx.lineTo(8, 0);
-                ctx.lineTo(0, 10);
-                ctx.lineTo(-8, 0);
-                ctx.closePath();
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-
-        /* ==========================================================================
-           4. GAME STATE MANAGEMENT & LOOP
-           ========================================================================== */
-        let starfield = new Starfield();
-        let player = null;
-        let bullets = [];
-        let obstacles = [];
-        let crystals = [];
-        let particles = [];
-        
-        let gameState = 'MENU'; // MENU, PLAYING, GAMEOVER
-        let score = 0;
-        let sessionCrystals = 0;
-        let combo = 1;
-        let comboTimer = null;
-        let spawnTimer = 0;
-        let sessionTrashDestroyed = 0;
-
-        function startGame() {
-            audio.init();
-            const shipConfig = SHIPS.find(s => s.id === playerData.selectedShip);
-            player = new Player(shipConfig);
-            bullets = [];
-            obstacles = [];
-            crystals = [];
-            particles = [];
-            score = 0;
-            sessionCrystals = 0;
-            combo = 1;
-            sessionTrashDestroyed = 0;
-
-            gameState = 'PLAYING';
-            updateHUD();
-
-            document.getElementById('main-menu').classList.add('hidden');
-            document.getElementById('game-over-menu').classList.add('hidden');
-            document.getElementById('hud').style.display = 'flex';
-        }
-
-        function triggerExplosion(x, y, color, count = 15) {
+        function triggerConfetti(count = 35) {
             for (let i = 0; i < count; i++) {
-                particles.push(new Particle(x, y, color, 4, Math.random() * 4 + 1, 25));
+                confetti.push(new ConfettiParticle());
             }
         }
 
-        function checkCollisions() {
-            // Bullets vs Obstacles
-            bullets.forEach(b => {
-                obstacles.forEach(o => {
-                    if (!b.markedForDeletion && !o.markedForDeletion) {
-                        const dist = Math.hypot(b.x - o.x, b.y - o.y);
-                        if (dist < b.radius + o.radius) {
-                            b.markedForDeletion = true;
-                            o.hp--;
-                            triggerExplosion(b.x, b.y, '#ffffff', 5);
-
-                            if (o.hp <= 0) {
-                                o.markedForDeletion = true;
-                                triggerExplosion(o.x, o.y, o.type === 'trash' ? '#99aa88' : '#777788', 18);
-                                audio.playExplosion();
-
-                                // Update Stats & Combo
-                                score += 50 * combo;
-                                sessionTrashDestroyed++;
-                                combo++;
-                                resetComboTimer();
-
-                                // Drop Crystal chance
-                                if (Math.random() < 0.4) {
-                                    crystals.push(new Crystal(o.x, o.y));
-                                }
-
-                                checkAchievements({ score, combo });
-                            }
-                        }
-                    }
-                });
-            });
-
-            // Player vs Obstacles
-            obstacles.forEach(o => {
-                if (!o.markedForDeletion) {
-                    const dist = Math.hypot(player.x - o.x, player.y - o.y);
-                    if (dist < player.radius + o.radius) {
-                        o.markedForDeletion = true;
-                        triggerExplosion(o.x, o.y, '#ff0055', 20);
-                        audio.playExplosion();
-
-                        // Combo Reset
-                        combo = 1;
-                        updateHUD();
-
-                        // Damage Logic
-                        const damage = o.type === 'trash' ? 20 : 35;
-                        if (player.shield > 0) {
-                            player.shield -= damage;
-                            if (player.shield < 0) {
-                                player.hp += player.shield; // Overflow to HP
-                                player.shield = 0;
-                            }
-                        } else {
-                            player.hp -= damage;
-                        }
-
-                        if (player.hp <= 0) {
-                            gameOver("Destruido por colisión espacial.");
-                        }
-                    }
-                }
-            });
-
-            // Player vs Crystals
-            crystals.forEach(c => {
-                if (!c.markedForDeletion) {
-                    const dist = Math.hypot(player.x - c.x, player.y - c.y);
-                    if (dist < player.radius + c.radius) {
-                        c.markedForDeletion = true;
-                        sessionCrystals++;
-                        playerData.crystals++;
-                        audio.playPickup();
-                        triggerExplosion(c.x, c.y, '#ffe600', 8);
-                        updateHUD();
-                        saveData();
-                        checkAchievements({ score, combo });
-                    }
-                }
-            });
-        }
-
-        function resetComboTimer() {
-            const badge = document.getElementById('combo-badge');
-            badge.classList.add('active');
-            clearTimeout(comboTimer);
-            comboTimer = setTimeout(() => {
-                combo = 1;
-                badge.classList.remove('active');
-                updateHUD();
-            }, 3000);
-            updateHUD();
-        }
-
-        function updateHUD() {
-            if (!player) return;
-            document.getElementById('hp-fill').style.width = `${Math.max(0, (player.hp / player.maxHp) * 100)}%`;
-            document.getElementById('shield-fill').style.width = `${Math.max(0, (player.shield / player.maxShield) * 100)}%`;
-            document.getElementById('score-text').innerText = score;
-            document.getElementById('combo-text').innerText = combo;
-            document.getElementById('crystals-text').innerText = playerData.crystals;
-        }
-
-        function gameOver(reason) {
-            gameState = 'GAMEOVER';
-            audio.playExplosion();
-
-            // Save persistent stats
-            playerData.gamesPlayed++;
-            playerData.trashDestroyed += sessionTrashDestroyed;
-            if (score > playerData.highScore) playerData.highScore = score;
-            if (combo > playerData.maxCombo) playerData.maxCombo = combo;
-            saveData();
-
-            // Update Game Over Modal
-            document.getElementById('game-over-reason').innerText = reason;
-            document.getElementById('go-score').innerText = score;
-            document.getElementById('go-crystals').innerText = sessionCrystals;
-            document.getElementById('go-combo').innerText = `x${combo}`;
-            
-            document.getElementById('hud').style.display = 'none';
-            document.getElementById('game-over-menu').classList.remove('hidden');
-        }
-
-        function gameLoop() {
+        function animateCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Always update Parallax background
-            starfield.update();
-            starfield.draw();
+            // Dibujar fondo
+            particles.forEach(p => { p.update(); p.draw(); });
 
-            if (gameState === 'PLAYING') {
-                // Spawn Logic
-                spawnTimer++;
-                if (spawnTimer % 45 === 0) {
-                    obstacles.push(new Obstacle());
-                }
-
-                // Update & Draw Entities
-                player.update();
-                player.draw();
-
-                bullets.forEach(b => b.update());
-                obstacles.forEach(o => o.update());
-                crystals.forEach(c => c.update());
-                particles.forEach(p => p.update());
-
-                // Filter deleted entities
-                bullets = bullets.filter(b => !b.markedForDeletion);
-                obstacles = obstacles.filter(o => !o.markedForDeletion);
-                crystals = crystals.filter(c => !c.markedForDeletion);
-                particles = particles.filter(p => p.life > 0);
-
-                // Draw Entities
-                bullets.forEach(b => b.draw());
-                obstacles.forEach(o => o.draw());
-                crystals.forEach(c => c.draw());
-                particles.forEach(p => p.draw());
-
-                checkCollisions();
-                updateHUD();
-            }
-
-            requestAnimationFrame(gameLoop);
-        }
-
-        /* ==========================================================================
-           5. UI RENDERERS & EVENT LISTENERS
-           ========================================================================== */
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
-
-            event.currentTarget.classList.add('active');
-            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-
-            if (tabName === 'shop') renderShop();
-            if (tabName === 'achievements') renderAchievements();
-            if (tabName === 'stats') renderStats();
-        }
-
-        function renderShop() {
-            document.getElementById('shop-crystals').innerText = playerData.crystals;
-            const grid = document.getElementById('ships-grid');
-            grid.innerHTML = '';
-
-            SHIPS.forEach(ship => {
-                const isSelected = playerData.selectedShip === ship.id;
-                const card = document.createElement('div');
-                card.className = `shop-card ${isSelected ? 'selected' : ''}`;
-                card.innerHTML = `
-                    <div style="font-family:var(--font-heading); color:${ship.color}; font-weight:bold;">${ship.name}</div>
-                    <div style="font-size:0.85rem; color:#aaa;">Velocidad: ${ship.speed} | HP: ${ship.hp}</div>
-                    <div style="margin-top:5px;">
-                        ${ship.unlocked 
-                            ? `<button class="btn" style="padding:5px 15px; font-size:0.8rem;" ${isSelected ? 'disabled' : ''} onclick="selectShip('${ship.id}')">
-                                ${isSelected ? 'SELECCIONADO' : 'EQUIPAR'}
-                              </button>`
-                            : `<button class="btn btn-accent" style="padding:5px 15px; font-size:0.8rem;" ${playerData.crystals < ship.price ? 'disabled' : ''} onclick="buyShip('${ship.id}')">
-                                <i class="fa-solid fa-gem"></i> ${ship.price}
-                              </button>`
-                        }
-                    </div>
-                `;
-                grid.appendChild(card);
+            // Dibujar confeti
+            confetti.forEach((c, idx) => {
+                c.update();
+                c.draw();
+                if (c.life <= 0) confetti.splice(idx, 1);
             });
+
+            requestAnimationFrame(animateCanvas);
         }
 
-        function selectShip(id) {
-            playerData.selectedShip = id;
-            saveData();
-            renderShop();
-        }
-
-        function buyShip(id) {
-            const ship = SHIPS.find(s => s.id === id);
-            if (ship && playerData.crystals >= ship.price) {
-                playerData.crystals -= ship.price;
-                playerData.unlockedShips.push(id);
-                ship.unlocked = true;
-                playerData.selectedShip = id;
-                saveData();
-                renderShop();
-                audio.playPickup();
-            }
-        }
-
-        function renderAchievements() {
-            const grid = document.getElementById('achievements-grid');
-            grid.innerHTML = '';
-
-            ACHIEVEMENTS.forEach(ach => {
-                const card = document.createElement('div');
-                card.className = `achieve-card ${ach.unlocked ? 'unlocked' : ''}`;
-                card.innerHTML = `
-                    <i class="fa-solid ${ach.icon}"></i>
-                    <div style="font-weight:bold; font-size:0.95rem;">${ach.title}</div>
-                    <div style="font-size:0.8rem; color:#aaa; text-align:center;">${ach.desc}</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderStats() {
-            document.getElementById('stat-highscore').innerText = playerData.highScore;
-            document.getElementById('stat-games').innerText = playerData.gamesPlayed;
-            document.getElementById('stat-trash').innerText = playerData.trashDestroyed;
-            document.getElementById('stat-crystals').innerText = playerData.crystals;
-        }
-
-        // Event Listeners for Buttons
-        document.getElementById('start-btn').addEventListener('click', startGame);
-        document.getElementById('restart-btn').addEventListener('click', startGame);
-        document.getElementById('menu-btn').addEventListener('click', () => {
-            document.getElementById('game-over-menu').classList.add('hidden');
-            document.getElementById('main-menu').classList.remove('hidden');
-            gameState = 'MENU';
-            renderShop();
-        });
-
-        // Initialize App
-        loadData();
-        renderShop();
-        requestAnimationFrame(gameLoop);
+        // Inicio
+        loadSavedData();
+        animateCanvas();
     </script>
 </body>
 </html>
